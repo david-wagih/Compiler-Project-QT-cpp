@@ -1,5 +1,4 @@
 #include "gui.h"
-#include "Scan.h"
 #include <QtWidgets/QApplication>
 
 #include "scanner.h"
