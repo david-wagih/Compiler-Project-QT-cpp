@@ -11,7 +11,6 @@ int main(int argc, char* argv[])
 	queue<Token> scanned;
     scanned = scan();
 
-	initMap();
 	QApplication a(argc, argv);
 	gui w;
 	w.show();

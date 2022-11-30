@@ -1,6 +1,7 @@
 #include "scanner.h"
 
 string tiny;
+map<string, string> reserved;
 
 void initMap() {
 	reserved["if"] = "IF";
@@ -118,6 +119,7 @@ void fileOut(queue<Token> s) {
 }
 
 queue<Token> scan() {
+	initMap();
 	string file("input.txt");
 	tiny = readFileIntoString(file);
 
