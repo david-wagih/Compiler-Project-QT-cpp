@@ -118,9 +118,9 @@ void fileOut(queue<Token> s) {
     myfile.close();
 }
 
-queue<Token> scan(string fileName) {
+queue<Token> scan() {
 	initMap();
-	string file(fileName);
+	string file("input.txt");
 	tiny = readFileIntoString(file);
 
 	queue<Token> tokens;
