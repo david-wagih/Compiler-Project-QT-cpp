@@ -1,0 +1,7 @@
+read x;
+if x = 4 
+then write xyz 
+end
+
+
+ 

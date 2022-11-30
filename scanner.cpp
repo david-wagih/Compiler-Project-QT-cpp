@@ -106,3 +106,26 @@ string readFileIntoString(const string& path) {
 	}
 	return string((istreambuf_iterator<char>(input_file)), std::istreambuf_iterator<char>());
 }
+
+void fileOut(queue<Token> s) {
+    ofstream myfile;
+    myfile.open("output.txt");
+    while (!s.empty()) {
+        myfile << s.front().type << ", " << s.front().value << "\n";
+        s.pop();
+    }
+    myfile.close();
+}
+
+queue<Token> scan() {
+	string file("input.txt");
+	tiny = readFileIntoString(file);
+
+	queue<Token> tokens;
+
+	while (getToken().type != "EOF")
+		tokens.push(getToken());
+
+	fileOut(tokens);
+	return tokens;
+}

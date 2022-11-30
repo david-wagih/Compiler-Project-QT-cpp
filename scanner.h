@@ -21,5 +21,5 @@ map<string, string> reserved;
 string readFileIntoString(const string& path);
 Token getToken();
 void fileOut(queue<Token> s);
-queue<Token> scanFile();
+queue<Token> scan();
 void initMap(void);
