@@ -15,8 +15,11 @@ struct Token
     string value;
 };
 
+map<string, string> reserved;
+
 //Function Prototypes
 string readFileIntoString(const string& path);
 Token getToken();
 void fileOut(queue<Token> s);
 queue<Token> scanFile();
+void initMap(void);

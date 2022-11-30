@@ -2,8 +2,7 @@
 
 string tiny;
 
-string isReserved(string s) {
-	map<string, string> reserved;
+void initMap() {
 	reserved["if"] = "IF";
 	reserved["then"] = "THEN";
 	reserved["else"] = "ELSE";
@@ -12,6 +11,9 @@ string isReserved(string s) {
 	reserved["until"] = "UNTIL";
 	reserved["read"] = "READ";
 	reserved["write"] = "WRITE";
+}
+
+string isReserved(string s) {
 	return reserved[s];
 }
 
@@ -93,4 +95,14 @@ Token getToken() {
 	}
 
 	return token;
+}
+
+string readFileIntoString(const string& path) {
+	ifstream input_file(path);
+	if (!input_file.is_open()) {
+		cerr << "Could not open the file - '"
+			<< path << "'" << endl;
+		exit(EXIT_FAILURE);
+	}
+	return string((istreambuf_iterator<char>(input_file)), std::istreambuf_iterator<char>());
 }
