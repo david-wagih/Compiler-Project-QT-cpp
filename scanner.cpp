@@ -118,15 +118,18 @@ void fileOut(queue<Token> s) {
     myfile.close();
 }
 
-queue<Token> scan() {
+queue<Token> scan(string fileName) {
 	initMap();
-	string file("input.txt");
+	string file(fileName);
 	tiny = readFileIntoString(file);
 
 	queue<Token> tokens;
 
-	while (getToken().type != "EOF")
-		tokens.push(getToken());
+	while (1) {
+		Token token = getToken();
+		if (token.type == "EOF") break;
+		tokens.push(token);
+	}
 
 	fileOut(tokens);
 	return tokens;
