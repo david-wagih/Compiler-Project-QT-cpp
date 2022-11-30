@@ -7,7 +7,6 @@
 #include <sstream>
 #include <queue>
 #include <map>
-
 using namespace std;
 
 struct Token
@@ -16,10 +15,8 @@ struct Token
     string value;
 };
 
-queue<Token> string_parse(string tiny);
-
+//Function Prototypes
 string readFileIntoString(const string& path);
-
+Token getToken();
 void fileOut(queue<Token> s);
-
 queue<Token> scanFile();

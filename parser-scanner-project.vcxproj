@@ -85,7 +85,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Scan.cpp" />
+    <ClCompile Include="scanner.cpp" />
     <QtRcc Include="gui.qrc" />
     <QtUic Include="gui.ui" />
     <QtMoc Include="gui.h" />
@@ -93,7 +93,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Scan.h" />
+    <ClInclude Include="scanner.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
