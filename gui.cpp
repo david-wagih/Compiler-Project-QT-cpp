@@ -8,3 +8,13 @@ gui::gui(QWidget *parent)
 
 gui::~gui()
 {}
+
+void gui::on_browseBTN_clicked() 
+{
+
+}
+
+void gui::on_scan_parseBTN_clicked() 
+{
+
+}

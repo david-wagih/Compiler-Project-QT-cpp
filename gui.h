@@ -11,6 +11,10 @@ public:
     gui(QWidget *parent = nullptr);
     ~gui();
 
+private slots:
+    void on_browseBTN_clicked();
+    void on_scan_parseBTN_clicked();
+
 private:
     Ui::guiClass ui;
 };

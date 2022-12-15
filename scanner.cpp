@@ -25,6 +25,11 @@ Token getToken() {
 	while (isspace(tiny[i]) || tiny[i] == '{') {
 		if (tiny[i] == '{') {
 			while (tiny[i] != '}') {
+				if (tiny[i] == '\0'){
+					token.type = "ERROR";
+					token.value = "Missing right curly bracket '}'";
+					return token;
+				}
 				i++;
 			}
 		}
@@ -94,6 +99,10 @@ Token getToken() {
 		token.type = "SEMICOLON";
 		token.value = tiny[i++];
 	}
+	else {
+		token.type = "ERROR";
+		token.value = tiny[i];
+	}
 
 	return token;
 }
@@ -101,8 +110,7 @@ Token getToken() {
 string readFileIntoString(const string& path) {
 	ifstream input_file(path);
 	if (!input_file.is_open()) {
-		cerr << "Could not open the file - '"
-			<< path << "'" << endl;
+		cerr << "Could not open the file - '" << path << "'" << endl;
 		exit(EXIT_FAILURE);
 	}
 	return string((istreambuf_iterator<char>(input_file)), std::istreambuf_iterator<char>());
@@ -112,23 +120,24 @@ void fileOut(queue<Token> s) {
     ofstream myfile;
     myfile.open("output.txt");
     while (!s.empty()) {
-        myfile << s.front().type << ", " << s.front().value << "\n";
+        myfile << s.front().value << ", " << s.front().type << "\n";
         s.pop();
     }
     myfile.close();
 }
 
-queue<Token> scan() {
+queue<Token> scan(string file_content) {
 	initMap();
-	string file("input.txt");
-	tiny = readFileIntoString(file);
+	tiny = file_content;
+	//string file("input.txt");
+	//tiny = readFileIntoString(file);
 
 	queue<Token> tokens;
-
 	while (1) {
 		Token token = getToken();
-		if (token.type == "EOF") break;
+		if (token.type == "EOF")	break;
 		tokens.push(token);
+		if(token.type == "ERROR")	break;
 	}
 
 	fileOut(tokens);
