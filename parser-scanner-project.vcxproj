@@ -85,6 +85,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="parser.cpp" />
     <ClCompile Include="scanner.cpp" />
     <QtRcc Include="gui.qrc" />
     <QtUic Include="gui.ui" />
@@ -93,6 +94,8 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="gui.h" />
+    <ClInclude Include="parser.h" />
     <ClInclude Include="scanner.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

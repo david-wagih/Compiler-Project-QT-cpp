@@ -14,10 +14,6 @@ void initMap() {
 	reserved["write"] = "WRITE";
 }
 
-string isReserved(string s) {
-	return reserved[s];
-}
-
 Token getToken() {
 	static int i = 0;
 	Token token;
@@ -55,8 +51,8 @@ Token getToken() {
 			str += tiny[i++];
 		}
 		token.value = str;
-		if (!isReserved(str).empty())	token.type = isReserved(str);
-		else							token.type = "IDENTIFIER";
+		if (reserved[s]) token.type = reserved[s];
+		else			 token.type = "IDENTIFIER";
 	}
 	else if (tiny[i]==':' && tiny[i+1]=='=') {
 		token.type = "ASSIGN";
