@@ -272,8 +272,10 @@ Node *factor(queue<Token> *q) {
 		q->pop();
 		root = exp(q);
 		if (q->front().type == "CLOSEDBRACKET") q->pop();
-		else error.value = "missing closed brackets";
-		root = newNode(error);
+		else {
+			error.value = "missing closed brackets";
+			root = newNode(error);
+		}
 	}
 	else if (q->front().type == "NUMBER") {
 		temp.type = "Const";
