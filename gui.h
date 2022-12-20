@@ -1,7 +1,7 @@
 #pragma once
-
 #include <QtWidgets/QMainWindow>
 #include "ui_gui.h"
+#include "parser.h"
 
 class gui : public QMainWindow
 {
@@ -12,6 +12,8 @@ public:
     ~gui();
 
 private slots:
+    int draw_node(Node* node, string& str, int id);
+    void generate_syntax_tree(Node* tree);
     void on_browseBTN_clicked();
     void on_scan_parseBTN_clicked();
 

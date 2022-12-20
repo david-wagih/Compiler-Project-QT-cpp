@@ -8,7 +8,9 @@ struct Node
 	Node* sibling;
 };
 
+//Function Prototypes
 Node* newNode(Token key);
+Node* parse(queue<Token>* q);
 Node* program(queue<Token>* q);
 Node* stmt_seq(queue<Token>* q);
 Node* statement(queue<Token>* q);

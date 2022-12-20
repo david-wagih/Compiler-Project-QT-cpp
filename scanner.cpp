@@ -51,8 +51,8 @@ Token getToken() {
 			str += tiny[i++];
 		}
 		token.value = str;
-		if (reserved[s]) token.type = reserved[s];
-		else			 token.type = "IDENTIFIER";
+		if (!reserved[str].empty())	token.type = reserved[str];
+		else						token.type = "IDENTIFIER";
 	}
 	else if (tiny[i]==':' && tiny[i+1]=='=') {
 		token.type = "ASSIGN";
@@ -114,7 +114,7 @@ string readFileIntoString(const string& path) {
 
 void fileOut(queue<Token> s) {
     ofstream myfile;
-    myfile.open("output.txt");
+    myfile.open("scanner_output.txt");
     while (!s.empty()) {
         myfile << s.front().value << ", " << s.front().type << "\n";
         s.pop();

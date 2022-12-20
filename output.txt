@@ -1,6 +1,0 @@
-IDENTIFIER, x
-IF, if
-EQUAL, =
-THEN, then
-IDENTIFIER, xyz
-EOF, 

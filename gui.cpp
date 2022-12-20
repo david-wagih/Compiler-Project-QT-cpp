@@ -9,6 +9,16 @@ gui::gui(QWidget *parent)
 gui::~gui()
 {}
 
+int gui::draw_node(Node* node, string& str, int id)
+{
+    return id;
+}
+
+void gui::generate_syntax_tree(Node* tree)
+{
+
+}
+
 void gui::on_browseBTN_clicked() 
 {
 
