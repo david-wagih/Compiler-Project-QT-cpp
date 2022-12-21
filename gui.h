@@ -2,6 +2,17 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_gui.h"
 #include "parser.h"
+#include <QFileDialog>
+#include <string>
+#include <QString>
+#include <QDir>
+#include <QFile>
+#include <QFileDialog>
+#include <QTextStream>
+#include <QMessageBox>
+#include "gvc.h"
+#include "cdt.h"
+#include "cgraph.h"
 
 class gui : public QMainWindow
 {

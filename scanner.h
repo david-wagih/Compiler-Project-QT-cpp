@@ -14,6 +14,7 @@ struct Token
 {
     string type;
     string value;
+    int id;
 };
 
 //Function Prototypes

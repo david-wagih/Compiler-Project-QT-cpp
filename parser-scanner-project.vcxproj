@@ -94,7 +94,6 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="gui.h" />
     <ClInclude Include="parser.h" />
     <ClInclude Include="scanner.h" />
   </ItemGroup>
