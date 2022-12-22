@@ -98,17 +98,50 @@ void gui::generate_syntax_tree(Node* tree)
 
 void gui::on_browseBTN_clicked() 
 {
-    // from here the user should be able to browse a file, text type (.txt), should be opened
-    // then copy the text into the proper Plain Text Editor.
+    QString filter = "Text Files (*.txt)";
+    QString openFile = QFileDialog::getOpenFileName(this,"Open a file","C://", filter);
+    QFile file(openFile);
+    if(!file.open(QFile::ReadOnly | QFile::Text)){
+         QMessageBox::warning(this,"Error","File could not be opened");
+    }
+    else{
+        QTextStream out(&file);
+        QString text = out.readAll();
+        ui->textEdit->setText(text);
+    }
 
 }
 
 // main function that will scan the program and then parse it
 void gui::on_scan_parseBTN_clicked() 
 {
-    // check if there is a file already chosen, and get the text inside it. [take it from the file itself or from the editor]
-    // scan the text >> tokens
-    // tokens >> parser >> Node for a tree
-    // then call generate syntax tree and pass the tree Node 
+    QString openFile;
+    openFile = ui->textEdit->readFileIntoString();
+    if (openFile == "") {
+        QMessageBox::warning(this,"Error","Null Input");
+        return;
+    }
+    queue<Token> input =scan(openFile.toStdString());  
+    if (!input.empty() && input.front().type == "Error") {
+        QMessageBox::warning(this,"Error",QString::fromStdString(input.front().value));
+        return;
+    }
+    Node* root = program(&input);
+    QFile file("Scanner_Output.txt");
+    if(!file.open(QFile::ReadOnly | QFile::Text)){
+         QMessageBox::warning(this,"Error","File could not be opened");
+    }
+    else{
+        QTextStream out(&file);
+        if(root->child.size()){
+            draw(root);
+            treePNG pngPhoto;
+            pngPhoto.setModal(true);
+            pngPhoto.exec();
+        }
+        else{
+            QMessageBox::warning(this,"Error",QString::fromStdString(root->key.value));
+        }
+    }
 
 }
