@@ -2,6 +2,7 @@
 #include "scanner.h"
 #include "parser.h"
 
+
 gui::gui(QWidget *parent)
     : QMainWindow(parent)
 {
@@ -79,7 +80,8 @@ void gui::generate_syntax_tree(Node* tree)
     // use the library functions to convert this string to picture
     // then set the Label in the GUI to take the picture inside.
     Agraph_t* G;
-    GVC_t* gvc = gvContext();
+    GVC_t* gvc;
+    gvc = gvContext();
     string dotLang = "graph main{";
     draw_node(tree->child[0], dotLang, 1);
     dotLang += "}";
@@ -96,6 +98,7 @@ void gui::generate_syntax_tree(Node* tree)
     QPixmap pix(c);
     ui.pictureLabel->setPixmap(pix);
     ui.pictureLabel->setScaledContents(true);
+
 }
 
 void gui::on_browseBTN_clicked() 
