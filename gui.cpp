@@ -1,5 +1,6 @@
 #include "gui.h"
-
+#include "scanner.h"
+#include "parser.h"
 
 gui::gui(QWidget *parent)
     : QMainWindow(parent)
@@ -11,6 +12,7 @@ gui::~gui()
 {}
 
 int counter;
+QString text = "";
 
 
 int gui::draw_node(Node* node, string& str, int id)
@@ -106,8 +108,8 @@ void gui::on_browseBTN_clicked()
     }
     else{
         QTextStream out(&file);
-        QString text = out.readAll();
-        ui->textEdit->setText(text);
+        text = out.readAll();
+        ui.inputProgram->setPlainText(text);
     }
 
 }
@@ -115,13 +117,11 @@ void gui::on_browseBTN_clicked()
 // main function that will scan the program and then parse it
 void gui::on_scan_parseBTN_clicked() 
 {
-    QString openFile;
-    openFile = ui->textEdit->readFileIntoString();
-    if (openFile == "") {
+    if (text == "") {
         QMessageBox::warning(this,"Error","Null Input");
         return;
     }
-    queue<Token> input =scan(openFile.toStdString());  
+    queue<Token> input =scan(text.toStdString());
     if (!input.empty() && input.front().type == "Error") {
         QMessageBox::warning(this,"Error",QString::fromStdString(input.front().value));
         return;
@@ -134,10 +134,7 @@ void gui::on_scan_parseBTN_clicked()
     else{
         QTextStream out(&file);
         if(root->child.size()){
-            draw(root);
-            treePNG pngPhoto;
-            pngPhoto.setModal(true);
-            pngPhoto.exec();
+            generate_syntax_tree(root);
         }
         else{
             QMessageBox::warning(this,"Error",QString::fromStdString(root->key.value));

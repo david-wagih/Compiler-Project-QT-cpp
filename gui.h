@@ -10,9 +10,9 @@
 #include <QFileDialog>
 #include <QTextStream>
 #include <QMessageBox>
-#include "gvc.h"
-#include "cdt.h"
-#include "cgraph.h"
+#include <C:\Program Files\Graphviz\include\graphviz\gvc.h>
+#include <C:\Program Files\Graphviz\include\graphviz\cdt.h>
+#include <C:\Program Files\Graphviz\include\graphviz\cgraph.h>
 
 class gui : public QMainWindow
 {
