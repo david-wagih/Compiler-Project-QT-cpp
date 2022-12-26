@@ -1,9 +1,6 @@
 #include "gui.h"
-#include "scanner.h"
-#include "parser.h"
 
-
-gui::gui(QWidget *parent)
+gui::gui(QWidget* parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
@@ -13,18 +10,14 @@ gui::~gui()
 {}
 
 int counter;
-QString text = "";
-
 
 int gui::draw_node(Node* node, string& str, int id)
 {
     int edge;
-
-    if (node->key.type == "READ" || node->key.type == "ASSIGN") {
+    if (node->key.type == "read" || node->key.type == "assign") {
         str += "node[shape = rect label=\"" + node->key.type + "\n(" + node->key.value + ")\"]id" + to_string(id) + " ";
     }
-
-    if (node->key.type == "IF" || node->key.type == "WRITE" || node->key.type == "REPEAT") {
+    else if (node->key.type == "IF" || node->key.type == "WRITE" || node->key.type == "REPEAT") {
         str += "node[shape = rect label=\"" + node->key.value + "\"]id" + to_string(id) + " ";
     }
     else {
@@ -51,15 +44,6 @@ int gui::draw_node(Node* node, string& str, int id)
         }
     }
 
-    // if the node itself has siblings then it draws edges between the siblings as normal
-    if (node->sibling != nullptr) {
-        counter++;
-        edge = draw_node(node->sibling, str, counter);
-        str += "{rank = same; id" + to_string(id) + "; id" + to_string(edge) + "; }" + " id" + to_string(id) + "--id" + to_string(edge) + " ";
-        node->sibling->key.id = edge;
-    }
-
-
     // if node children > 1 && the node has no siblings >> ????? [operators??]
     for (int i = 0; i < (int)node->child.size() - 1; i++) {
         Node* temp, * temp2;
@@ -70,78 +54,100 @@ int gui::draw_node(Node* node, string& str, int id)
         }
     }
 
+    // if the node itself has siblings then it draws edges between the siblings as normal
+    if (node->sibling != nullptr) {
+        counter++;
+        edge = draw_node(node->sibling, str, counter);
+        str += "{rank = same; id" + to_string(id) + "; id" + to_string(edge) + "; }" + " id" + to_string(id) + "--id" + to_string(edge) + " ";
+        node->sibling->key.id = edge;
+    }
+
     return id;
 }
 
 void gui::generate_syntax_tree(Node* tree)
 {
     // will use draw_node to convert from Node into dot language and pass the Node tree to it
-    // then we will use the string that we referenced in the draw node function
+    // then we will use the string that we referenced in the draw_node function
     // use the library functions to convert this string to picture
     // then set the Label in the GUI to take the picture inside.
+
     Agraph_t* G;
-    GVC_t* gvc;
-    gvc = gvContext();
+    GVC_t* gvc = gvContext();
     string dotLang = "graph main{";
-    draw_node(tree->child[0], dotLang, 1);
+    draw_node(tree->child[0], dotLang, 0);
     dotLang += "}";
+
     char* y = &dotLang[0];
     G = agmemread(y);
     gvLayout(gvc, G, "dot");
-    QString path = QCoreApplication::applicationDirPath() + "/syntax_tree.png";
-    const char* c = path.toStdString().c_str();
+    string path = "syntax_tree.png";
+    const char* c = path.c_str();
     gvRenderFilename(gvc, G, "png", c);
     gvFreeLayout(gvc, G);
     agclose(G);
     gvFreeContext(gvc);
+
     // put the pictue in the label
     QPixmap pix(c);
     ui.pictureLabel->setPixmap(pix);
     ui.pictureLabel->setScaledContents(true);
-
 }
 
-void gui::on_browseBTN_clicked() 
+void gui::on_browseBTN_clicked()
 {
-    QString filter = "Text Files (*.txt)";
-    QString openFile = QFileDialog::getOpenFileName(this,"Open a file","C://", filter);
-    QFile file(openFile);
-    if(!file.open(QFile::ReadOnly | QFile::Text)){
-         QMessageBox::warning(this,"Error","File could not be opened");
-    }
-    else{
-        QTextStream out(&file);
-        text = out.readAll();
-        ui.inputProgram->setPlainText(text);
-    }
+    ui.filePathText->clear();
+    ui.inputProgram->clear();
+    ui.listOfTokens->clear();
+    ui.pictureLabel->clear();
 
+    QString filter = "Text File(*.txt)";
+    QString openFile = QFileDialog::getOpenFileName(this, "Open a file", "C://", filter);
+    QFile file(openFile);
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        QMessageBox::warning(this, "Error", "File could not be opened");
+    }
+    else {
+        ui.filePathText->setText(openFile);
+        QTextStream in(&file);
+        QString text = in.readAll();
+        ui.inputProgram->setPlainText(text);
+        file.close();
+    }
 }
 
 // main function that will scan the program and then parse it
-void gui::on_scan_parseBTN_clicked() 
+void gui::on_scan_parseBTN_clicked()
 {
-    if (text == "") {
-        QMessageBox::warning(this,"Error","Null Input");
+    QString program = ui.inputProgram->toPlainText();
+    if (program == "") {
+        QMessageBox::warning(this, "Error", "Null Input");
         return;
-    }
-    queue<Token> input =scan(text.toStdString());
-    if (!input.empty() && input.front().type == "Error") {
-        QMessageBox::warning(this,"Error",QString::fromStdString(input.front().value));
-        return;
-    }
-    Node* root = program(&input);
-    QFile file("Scanner_Output.txt");
-    if(!file.open(QFile::ReadOnly | QFile::Text)){
-         QMessageBox::warning(this,"Error","File could not be opened");
-    }
-    else{
-        QTextStream out(&file);
-        if(root->child.size()){
-            generate_syntax_tree(root);
-        }
-        else{
-            QMessageBox::warning(this,"Error",QString::fromStdString(root->key.value));
-        }
     }
 
+    queue<Token> tokensQueue = scan(program.toStdString());
+    QFile file("scanner_output.txt");
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        QMessageBox::warning(this, "Error", "File could not be opened");
+        return;
+    }
+    QTextStream out(&file);
+    QString tokens = out.readAll();
+    ui.listOfTokens->setPlainText(tokens);
+
+    if (tokensQueue.empty()) {
+        QMessageBox::warning(this, "Error", "No tokens!");
+        return;
+    }
+    else if (tokensQueue.back().type == "ERROR") {
+        QMessageBox::warning(this, "Error", "Scanning Error");
+        return;
+    }
+
+    Node* root = parse(&tokensQueue);
+    if (root->key.type == "ERROR") {
+        QMessageBox::warning(this, "Error", QString::fromStdString(root->key.value));
+        return;
+    }
+    generate_syntax_tree(root);
 }

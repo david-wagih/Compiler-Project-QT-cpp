@@ -1,25 +1,25 @@
-#pragma once
-#include <QtWidgets/QMainWindow>
+#ifndef GUI_H
+#define GUI_H
+
+#include <QMainWindow>
 #include "ui_gui.h"
 #include "parser.h"
 #include <QFileDialog>
-#include <string>
-#include <QString>
-#include <QDir>
-#include <QFile>
-#include <QFileDialog>
-#include <QTextStream>
 #include <QMessageBox>
-#include "graphviz/gvc.h"
-#include "graphviz/cdt.h"
-#include "graphviz/cgraph.h"
+#include "gvc.h"
+#include "cdt.h"
+#include "cgraph.h"
+
+QT_BEGIN_NAMESPACE
+namespace Ui { class gui; }
+QT_END_NAMESPACE
 
 class gui : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    gui(QWidget *parent = nullptr);
+    gui(QWidget* parent = nullptr);
     ~gui();
 
 private slots:
@@ -31,3 +31,5 @@ private slots:
 private:
     Ui::guiClass ui;
 };
+
+#endif // GUI_H

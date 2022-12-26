@@ -1,5 +1,6 @@
 #include "scanner.h"
 
+int i = 0;
 string tiny;
 map<string, string> reserved;
 
@@ -15,13 +16,11 @@ void initMap() {
 }
 
 Token getToken() {
-	static int i = 0;
 	Token token;
-
 	while (isspace(tiny[i]) || tiny[i] == '{') {
 		if (tiny[i] == '{') {
 			while (tiny[i] != '}') {
-				if (tiny[i] == '\0'){
+				if (tiny[i] == '\0') {
 					token.type = "ERROR";
 					token.value = "Missing right curly bracket '}'";
 					return token;
@@ -54,7 +53,7 @@ Token getToken() {
 		if (!reserved[str].empty())	token.type = reserved[str];
 		else						token.type = "IDENTIFIER";
 	}
-	else if (tiny[i]==':' && tiny[i+1]=='=') {
+	else if (tiny[i] == ':' && tiny[i + 1] == '=') {
 		token.type = "ASSIGN";
 		token.value = ":=";
 		i += 2;
@@ -113,17 +112,18 @@ string readFileIntoString(const string& path) {
 }
 
 void fileOut(queue<Token> s) {
-    ofstream myfile;
-    myfile.open("scanner_output.txt");
-    while (!s.empty()) {
-        myfile << s.front().value << ", " << s.front().type << "\n";
-        s.pop();
-    }
-    myfile.close();
+	ofstream myfile;
+	myfile.open("scanner_output.txt");
+	while (!s.empty()) {
+		myfile << s.front().value << ", " << s.front().type << "\n";
+		s.pop();
+	}
+	myfile.close();
 }
 
 queue<Token> scan(string file_content) {
 	initMap();
+	i = 0;
 	tiny = file_content;
 	//string file("input.txt");
 	//tiny = readFileIntoString(file);
@@ -133,9 +133,8 @@ queue<Token> scan(string file_content) {
 		Token token = getToken();
 		if (token.type == "EOF")	break;
 		tokens.push(token);
-		if(token.type == "ERROR")	break;
+		if (token.type == "ERROR")	break;
 	}
-
 	fileOut(tokens);
 	return tokens;
 }
