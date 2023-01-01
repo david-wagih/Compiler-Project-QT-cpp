@@ -113,7 +113,7 @@ Node* repeat_stmt(queue<Token>* q) {
     Node* root = nullptr;
     Node* child;
     Token error;
-    error.value = "ERROR";
+    error.type = "ERROR";
     if (q->front().type == "REPEAT") {
         root = newNode(q->front());
         q->pop();
@@ -154,7 +154,7 @@ Node* assign_stmt(queue<Token>* q) {
             else							root->child.push_back(child);
         }
         else {
-            error.type = "invalid assign syntax";
+            error.value = "invalid assign syntax";
             root = newNode(error);
         }
     }
